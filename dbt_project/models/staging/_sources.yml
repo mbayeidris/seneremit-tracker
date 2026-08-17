@@ -1,0 +1,9 @@
+version: 2
+
+sources:
+  - name: raw
+    schema: raw
+    tables:
+      - name: raw_worldbank_remittances
+      - name: raw_fintech_tariffs
+      - name: raw_exchange_rates

@@ -1,0 +1,44 @@
+version: 2
+
+models:
+  - name: stg_fintech_tariffs
+    columns:
+      - name: operateur
+        tests:
+          - not_null              # aucune ligne ne doit avoir un opérateur vide
+          - accepted_values:      # on sait qu'il n'y a que 2 opérateurs possibles
+              arguments:
+                values: ['Wave', 'Orange Money']
+      - name: type_operation
+        tests:
+          - not_null              # une ligne sans type d'opération n'a pas de sens
+      - name: frais_pourcentage
+        tests:
+          - not_null              # le calcul du coût dépend entièrement de cette valeur
+  
+  - name: stg_worldbank_remittances
+    columns:
+      - name: firm
+        tests:
+          - not_null              # sans opérateur, la ligne est inutilisable pour la comparaison
+      - name: destination_name
+        tests:
+          - not_null
+          - accepted_values:      # vérifie qu'on n'a bien QUE le Sénégal (garde-fou sur le filtrage)
+              arguments:
+                values: ['Senegal']
+      - name: period
+        tests:
+          - not_null              # sans trimestre, impossible de faire l'analyse de tendance
+
+  - name: stg_exchange_rates
+    columns:
+      - name: devise_origine
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['EUR', 'USD']
+      - name: taux
+        tests:
+          - not_null

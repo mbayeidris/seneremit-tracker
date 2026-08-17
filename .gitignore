@@ -4,3 +4,7 @@ __pycache__/
 dbt_project/target/
 dbt_project/dbt_packages/
 *.xlsx
+venv/
+logs/
+dbt_project/profiles_docker/profiles.yml
+*.pbix

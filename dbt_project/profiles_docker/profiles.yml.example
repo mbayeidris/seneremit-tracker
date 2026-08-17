@@ -1,0 +1,17 @@
+# Copiez ce fichier vers profiles.yml (même dossier) et remplacez les valeurs
+# par vos propres identifiants avant de lancer le projet.
+# Ce fichier est utilisé par Airflow, à l'intérieur des conteneurs Docker
+# (host = nom du service Docker "postgres_warehouse", pas "localhost").
+
+dbt_project:
+  target: dev
+  outputs:
+    dev:
+      type: postgres
+      host: postgres_warehouse
+      port: 5432
+      user: your_postgres_user
+      pass: your_postgres_password
+      dbname: seneremit_db
+      schema: analytics
+      threads: 4

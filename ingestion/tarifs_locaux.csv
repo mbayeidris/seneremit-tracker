@@ -1,0 +1,9 @@
+operateur,type_operation,frais_fixe_xof,frais_pourcentage,plafond_xof,source,date_verification
+Wave,transfert_argent,0.0,0.01,,Capture officielle app Wave (fournie par l'utilisateur),2026-08
+Wave,depot,0.0,0.0,,Capture officielle app Wave (fournie par l'utilisateur),2026-08
+Wave,retrait,0.0,0.0,,Capture officielle app Wave (fournie par l'utilisateur),2026-08
+Wave,paiement_factures,0.0,0.0,,Capture officielle app Wave (fournie par l'utilisateur),2026-08
+Orange Money,transfert_argent,0.0,0.0,,Confirmé par l'utilisateur,2026-08
+Orange Money,retrait,0.0,0.01,5000.0,Confirmé par l'utilisateur,2026-08
+Orange Money,transfert_avec_code,0.0,0.01,,Confirmé par l'utilisateur,2026-08
+Orange Money,paiement_factures,0.0,0.0,,Confirmé par l'utilisateur,2026-08

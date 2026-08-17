@@ -1,0 +1,121 @@
+version: '3.8'
+# ^ version du format docker-compose (une convention, pas grand-chose à comprendre ici)
+
+services:
+  # ---------------------------------------------------------
+  # SERVICE 1 : base de données interne à Airflow
+  # Airflow a besoin de stocker son propre état (quelles tâches
+  # ont tourné, quand, avec quel statut...) - PAS vos données métier
+  # ---------------------------------------------------------
+  postgres_meta:
+    image: postgres:15              # on utilise l'image officielle PostgreSQL version 15
+    environment:                    # variables données au conteneur au démarrage
+      POSTGRES_USER: airflow
+      POSTGRES_PASSWORD: airflow
+      POSTGRES_DB: airflow
+
+  # ---------------------------------------------------------
+  # SERVICE 2 : VOTRE entrepôt de données (le vrai projet)
+  # C'est ici que vous stockerez raw / staging / analytics
+  # ---------------------------------------------------------
+  postgres_warehouse:
+    image: postgres:15
+    container_name: seneremit_warehouse   # nom fixe et lisible dans "docker ps"
+    environment:
+      POSTGRES_USER: postgres_user
+      POSTGRES_PASSWORD: postgres_password
+      POSTGRES_DB: seneremit_db
+    ports:
+      - "5432:5432"
+      # format "port_de_votre_PC:port_du_conteneur"
+      # ça permet à DBeaver (sur votre PC, port 5432) de parler
+      # au PostgreSQL qui tourne DANS le conteneur (aussi port 5432)
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      # sans ça, toutes vos données disparaissent dès que vous
+      # faites "docker compose down" - le volume les garde sur disque
+
+  # ---------------------------------------------------------
+  # SERVICE 3 : l'interface web d'Airflow (ce que vous voyez
+  # sur localhost:8080 dans le navigateur)
+  # ---------------------------------------------------------
+  airflow-webserver:
+    image: apache/airflow:2.9.3-python3.10
+    environment:
+      AIRFLOW__CORE__EXECUTOR: LocalExecutor
+      # LocalExecutor = Airflow exécute les tâches directement sur
+      # cette machine (suffisant pour un projet perso, pas pour la prod)
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres_meta:5432/airflow
+      # ^ remarquez "postgres_meta" au lieu de "localhost" : à l'intérieur
+      # du réseau Docker Compose, chaque service se contacte par son NOM,
+      # pas par localhost (localhost = "moi-même", pas "l'autre conteneur")
+      AIRFLOW__CORE__LOAD_EXAMPLES: 'false'
+      # sinon Airflow remplit son interface avec des dizaines de DAGs
+      # d'exemple qui n'ont rien à voir avec votre projet
+      _PIP_ADDITIONAL_REQUIREMENTS: 'pandas sqlalchemy psycopg2-binary requests openpyxl dbt-postgres'
+      AIRFLOW__WEBSERVER__SECRET_KEY: 'seneremit2026'
+      PG_HOST: postgres_warehouse          # ← nouvelle ligne
+    volumes:
+      - ./dags:/opt/airflow/dags
+      # relie votre dossier local ./dags à l'intérieur du conteneur
+      # → vous modifiez un fichier DAG sur votre PC, Airflow le voit direct
+      - ./ingestion:/opt/airflow/ingestion
+      - ./dbt_project:/opt/airflow/dbt_project
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres_meta
+      # Docker Compose lance postgres_meta AVANT ce service
+      # (mais ne garantit pas que Postgres soit "prêt", juste "lancé" -
+      # nuance qu'on gère plus tard avec un healthcheck si besoin)
+    command: webserver
+    # dit à l'image Airflow (qui peut faire plusieurs métiers) :
+    # "lance-toi en mode webserver précisément"
+    
+
+  # ---------------------------------------------------------
+  # SERVICE 4 : le planificateur - le "cerveau" qui déclenche
+  # vos tâches selon le calendrier défini dans vos DAGs
+  # ---------------------------------------------------------
+  airflow-scheduler:
+    image: apache/airflow:2.9.3-python3.10
+    environment:
+      AIRFLOW__CORE__EXECUTOR: LocalExecutor
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres_meta:5432/airflow
+      AIRFLOW__CORE__LOAD_EXAMPLES: 'false'
+      _PIP_ADDITIONAL_REQUIREMENTS: 'pandas sqlalchemy psycopg2-binary requests openpyxl dbt-postgres'
+      AIRFLOW__WEBSERVER__SECRET_KEY: 'seneremit2026'
+      PG_HOST: postgres_warehouse          # ← nouvelle ligne
+    volumes:
+      - ./dags:/opt/airflow/dags
+      - ./ingestion:/opt/airflow/ingestion
+      - ./dbt_project:/opt/airflow/dbt_project
+    depends_on:
+      - postgres_meta
+    command: scheduler
+    # pas de "ports:" ici : personne n'a besoin d'ouvrir une page web
+    # pour parler au scheduler, il travaille en arrière-plan seulement
+
+  airflow-init:
+    image: apache/airflow:2.9.3-python3.10
+    environment:
+      AIRFLOW__CORE__EXECUTOR: LocalExecutor
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres_meta:5432/airflow
+      _PIP_ADDITIONAL_REQUIREMENTS: 'pandas sqlalchemy psycopg2-binary requests openpyxl dbt-postgres'
+      AIRFLOW__WEBSERVER__SECRET_KEY: 'seneremit2026'
+      PG_HOST: postgres_warehouse          # ← nouvelle ligne
+    depends_on:
+      - postgres_meta
+    volumes:
+      - ./ingestion:/opt/airflow/ingestion
+      - ./dbt_project:/opt/airflow/dbt_project
+    entrypoint: /bin/bash
+    command:
+      - -c
+      - |
+        airflow db migrate
+        airflow users create --username airflow --password airflow --firstname Data --lastname Engineer --role Admin --email admin@example.com
+
+volumes:
+  postgres_data:
+  # déclaration du volume nommé utilisé plus haut par postgres_warehouse

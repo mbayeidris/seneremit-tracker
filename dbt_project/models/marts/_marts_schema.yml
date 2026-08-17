@@ -1,0 +1,25 @@
+version: 2
+
+models:
+  - name: fct_remittance_costs
+    columns:
+      - name: operateur
+        tests:
+          - not_null
+      - name: cout_total_pourcentage
+        description: >
+            Coût total du transfert en pourcentage. Peut être ponctuellement négatif
+            pour certains opérateurs internationaux (ex: Western Union sur paiement carte),
+            reflétant des promotions temporaires où la marge de change appliquée est
+            plus favorable que le taux de marché. Confirmé par investigation de raw.raw_worldbank_remittances.
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: -5
+                max_value: 50
+      - name: type_operateur
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['international', 'local']
