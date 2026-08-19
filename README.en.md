@@ -6,7 +6,7 @@ A Modern Data Stack pipeline analyzing the real cost of sending money to Senegal
 
 **How much does it really cost to send money to Senegal?** This project answers that question with real data: 2,000+ transactions (2011–2025, World Bank source), analyzed end-to-end, from raw ingestion to an interactive dashboard.
 
-> 📊 [View the Power BI dashboard](#) · 📄 [View the LinkedIn post](#)
+> 📊 [View the Power BI dashboard](https://app.powerbi.com/view?r=eyJrIjoiNTlkYzg3YzYtNDI3MC00NmJiLWE0NjQtMDc3MjNlMzc5ZDEzIiwidCI6ImYxYTRjMTkxLTNhNDEtNDAxOC05NzdmLTkyMWMzMGI0MzQ4NCJ9) · 📄 [View the LinkedIn post](#)
 
 ---
 
