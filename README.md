@@ -135,8 +135,4 @@ Certains coûts sont **négatifs** dans le jeu de données (ex : Western Union, 
 
 ## Auteur
 
-Idrissa Mbaye — [LinkedIn](https://www.linkedin.com/in/idrissa-mbaye) · [GitHub](https://github.com/mbayeidris)
-
-## Licence
-
-MIT — les données sources restent soumises aux conditions d'utilisation de leurs éditeurs respectifs (Banque Mondiale, Wave, Orange Money).
+Idrissa Mbaye — Data Analyst - Junior Data Engineer — [LinkedIn](https://www.linkedin.com/in/idrissa-mbaye) · [GitHub](https://github.com/mbayeidris)

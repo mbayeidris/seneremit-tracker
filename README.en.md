@@ -135,8 +135,5 @@ Some costs in the dataset are **negative** (e.g. Western Union, card payment, su
 
 ## Author
 
-Idrissa Mbaye — [LinkedIn](https://www.linkedin.com/in/idrissa-mbaye) · [GitHub](https://github.com/mbayeidris)
+Idrissa Mbaye — Data Analyst - Junior Data Engineer — [LinkedIn](https://www.linkedin.com/in/idrissa-mbaye) · [GitHub](https://github.com/mbayeidris)
 
-## License
-
-MIT — source data remains subject to the terms of use of their respective publishers (World Bank, Wave, Orange Money).
