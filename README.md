@@ -1,10 +1,12 @@
 # SeneRemit-Tracker
 
+🇫🇷 Version française (cette page) · 🇬🇧 [English version](README.en.md)
+
 Pipeline de données Modern Data Stack analysant le coût réel d'envoi d'argent vers le Sénégal — envois internationaux (France, Italie) et transferts locaux (Wave, Orange Money).
 
 **Combien coûte réellement l'envoi d'argent vers le Sénégal ?** Ce projet répond à cette question avec des données réelles : 2 000+ transactions (2011–2025, source Banque Mondiale), analysées de bout en bout, de l'ingestion brute au dashboard interactif.
 
-> 📊 [Voir le dashboard Power BI](https://app.powerbi.com/view?r=eyJrIjoiNTlkYzg3YzYtNDI3MC00NmJiLWE0NjQtMDc3MjNlMzc5ZDEzIiwidCI6ImYxYTRjMTkxLTNhNDEtNDAxOC05NzdmLTkyMWMzMGI0MzQ4NCJ9) · 📄 [Voir le post LinkedIn](#)
+> 📊 [Voir le dashboard Power BI](#) · 📄 [Voir le post LinkedIn](#)
 
 ---
 
@@ -82,7 +84,7 @@ Vérifiez `http://localhost:8080` (Airflow, identifiants `airflow`/`airflow`).
 
 ### 2. Base de données
 
-Créez les schémas (`raw`, `staging`, `analytics`) — gérés automatiquement au premier lancement de `ingest.py`.
+Les schémas (`raw`, `staging`, `analytics`) sont créés automatiquement au premier lancement de `ingest.py`.
 
 ### 3. Ingestion (test manuel)
 
@@ -134,3 +136,7 @@ Certains coûts sont **négatifs** dans le jeu de données (ex : Western Union, 
 ## Auteur
 
 Idrissa Mbaye — [LinkedIn](https://www.linkedin.com/in/idrissa-mbaye) · [GitHub](https://github.com/mbayeidris)
+
+## Licence
+
+MIT — les données sources restent soumises aux conditions d'utilisation de leurs éditeurs respectifs (Banque Mondiale, Wave, Orange Money).
