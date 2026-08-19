@@ -133,4 +133,4 @@ Certains coûts sont **négatifs** dans le jeu de données (ex : Western Union, 
 
 ## Auteur
 
-Idrissa Mbaye — [LinkedIn](www.linkedin.com/in/idrissa-mbaye) · [GitHub](https://github.com/mbayeidris)
+Idrissa Mbaye — [LinkedIn](https://www.linkedin.com/in/idrissa-mbaye) · [GitHub](https://github.com/mbayeidris)
